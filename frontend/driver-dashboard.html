@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f5f1;
+      color: #24352a;
+    }
+
+    header {
+      background: #187746;
+      color: white;
+      padding: 22px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px #00000012;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #187746;
+    }
+
+    .number {
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .table-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 500px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #e5f3e9;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 11px 18px;
+      background: #187746;
+      color: white;
+      text-decoration: none;
+      border-radius: 7px;
+    }
+
+    #message {
+      color: #555;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🚛 Driver Dashboard</h1>
+    <p>Manage waste pickup schedules</p>
+  </header>
+
+  <main class="container">
+    <div class="summary">
+      <div class="card">
+        <h3>Total Pickup Schedules</h3>
+        <div class="number" id="totalPickups">0</div>
+      </div>
+
+      <div class="card">
+        <h3>Scheduled Pickups</h3>
+        <div class="number" id="scheduledPickups">0</div>
+      </div>
+    </div>
+
+    <section class="table-box">
+      <h2>Pickup Schedules</h2>
+      <p id="message">Loading pickup schedules...</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Household</th>
+            <th>Address</th>
+            <th>Pickup Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="pickupTable"></tbody>
+      </table>
+    </section>
+
+    <a class="back" href="index.html">← Back to Home</a>
+  </main>
+
+  <script>
+    async function loadPickups() {
+      const message = document.getElementById("message");
+      const table = document.getElementById("pickupTable");
+
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/pickups"
+        );
+
+        if (!response.ok) {
+          throw new Error("Could not load pickup schedules");
+        }
+
+        const pickups = await response.json();
+
+        document.getElementById("totalPickups").textContent =
+          pickups.length;
+
+        document.getElementById("scheduledPickups").textContent =
+          pickups.filter(p => p.status === "Scheduled").length;
+
+        table.replaceChildren();
+
+        if (pickups.length === 0) {
+          message.textContent = "No pickup schedules found.";
+          return;
+        }
+
+        message.textContent = "";
+
+        pickups.forEach(pickup => {
+          const row = document.createElement("tr");
+
+          const household = pickup.household || {};
+
+          const values = [
+            household.name || "Unknown",
+            household.address || "Not available",
+            pickup.pickupDate
+              ? new Date(pickup.pickupDate).toLocaleDateString()
+              : "Not available",
+            pickup.status || "Scheduled"
+          ];
+
+          values.forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+
+          table.appendChild(row);
+        });
+      } catch (error) {
+        message.textContent =
+          "Could not connect to backend. Please start the server.";
+        console.error(error);
+      }
+    }
+
+    loadPickups();
+  </script>
+</body>
+</html>

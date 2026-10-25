@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Pickup Platform | Clean & Green City</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Enhanced homepage design */
+        .hero {
+            position: relative;
+            isolation: isolate;
+            min-height: 500px;
+            gap: 35px;
+            background:
+                radial-gradient(circle at 85% 80%, #c2efb2, transparent 28%),
+                linear-gradient(120deg, #d9f8e4, #f8fffb 58%, #e2f6d8);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 5vw, 62px);
+        }
+
+        .hero-image {
+            position: relative;
+            flex-shrink: 0;
+            width: min(340px, 35vw);
+            height: 340px;
+            margin-right: 3%;
+            border: 8px solid rgba(255,255,255,.8);
+            background: linear-gradient(145deg, #ffffff, #d8f6dc);
+            box-shadow: 0 25px 65px rgba(24,128,56,.2);
+            font-size: 76px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: floatGreen 4s ease-in-out infinite;
+        }
+
+        .hero-image .truck-art {
+            font-size: 100px;
+            line-height: 1.3;
+        }
+
+        .hero-image .nature-art {
+            font-size: 43px;
+        }
+
+        .hero-decor {
+            position: absolute;
+            z-index: -1;
+            font-size: 48px;
+            opacity: .65;
+            pointer-events: none;
+        }
+
+        .hero-tree-left {
+            left: 2%;
+            bottom: 12px;
+        }
+
+        .hero-tree-right {
+            right: 2%;
+            bottom: 12px;
+        }
+
+        .green-note {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+            background: #ffffffd9;
+            color: #188038;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 5px 18px #18803812;
+        }
+
+        .services {
+            background: linear-gradient(180deg, #f7fcf8, #edf8f0);
+        }
+
+        .service-card {
+            border-top: 4px solid #39a85a;
+        }
+
+        .service-card:nth-child(2) {
+            border-top-color: #66bb6a;
+        }
+
+        .service-card:nth-child(3) {
+            border-top-color: #e6b94f;
+        }
+
+        .service-card:nth-child(4) {
+            border-top-color: #41a7a0;
+        }
+
+        .service-card:nth-child(5) {
+            border-top-color: #7c9f42;
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #e3f9e8, #c8f0d1);
+        }
+
+        .service-card button,
+        .main-btn,
+        .header-btn,
+        .form-btn {
+            background: linear-gradient(135deg, #188038, #27a653);
+        }
+
+        .service-card button:hover,
+        .main-btn:hover,
+        .header-btn:hover,
+        .form-btn:hover {
+            background: #11652b;
+        }
+
+        .eco-strip {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            padding: 28px 20px;
+            background: #ffffff;
+            border-top: 1px solid #e2eee5;
+            border-bottom: 1px solid #e2eee5;
+        }
+
+        .eco-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 16px;
+            border-radius: 30px;
+            background: #edf8f0;
+            color: #24683a;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .eco-item span {
+            font-size: 22px;
+        }
+
+        .about {
+            background:
+                radial-gradient(ellipse at top right, #285b37, transparent 55%),
+                #12351f;
+        }
+
+        footer {
+            border-top: 4px solid #35a853;
+        }
+
+        @keyframes floatGreen {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-9px); }
+        }
+
+        @media (max-width: 850px) {
+            .hero {
+                text-align: center;
+                flex-direction: column;
+                padding: 55px 6% 75px;
+            }
+
+            .hero-image {
+                width: 230px;
+                height: 230px;
+                margin: 20px 0 0;
+                font-size: 55px;
+            }
+
+            .hero-image .truck-art {
+                font-size: 72px;
+            }
+
+            .hero-image .nature-art {
+                font-size: 32px;
+            }
+
+            .hero-tree-left,
+            .hero-tree-right {
+                font-size: 28px;
+            }
+
+            .eco-strip {
+                gap: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-image {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">♻️ Waste Pickup Platform</div>
+
+        <nav>
+            <a href="#" onclick="showHome(); return false;">Home</a>
+            <a href="#services">Services</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <button class="header-btn" onclick="showSection('scheduleSection')">
+            Schedule Pickup
+        </button>
+        
+        <button class="header-btn" onclick="window.location.href='login.html'">
+            Login
+         </button>
+
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <span class="hero-decor hero-tree-left">🌳 🌿</span>
+        <span class="hero-decor hero-tree-right">🌱 🗑️</span>
+
+        <div class="hero-content">
+            <div class="green-note">🌍 A Cleaner City Starts With Us</div>
+
+            <p class="small-title">SMART WASTE MANAGEMENT</p>
+
+            <h1>
+                Keep Your City
+                <span>Clean & Green</span>
+            </h1>
+
+            <p>
+                Easily schedule waste pickups, register households
+                and submit complaints through our Waste Pickup Platform.
+                Together, let's make every neighbourhood cleaner!
+            </p>
+
+            <button class="main-btn" onclick="scrollToServices()">
+                Explore Services →
+            </button>
+        </div>
+
+        <div class="hero-image" aria-label="Eco-friendly waste collection illustration">
+            <div class="nature-art">🌳 🌿</div>
+            <div class="truck-art">🚛</div>
+            <div class="nature-art">♻️ 🗑️ 🌱</div>
+        </div>
+    </section>
+
+    <!-- ECO STRIP -->
+    <section class="eco-strip" aria-label="Environmental benefits">
+        <div class="eco-item"><span>🌳</span> Keep It Green</div>
+        <div class="eco-item"><span>🚛</span> Easy Waste Pickup</div>
+        <div class="eco-item"><span>♻️</span> Recycle Responsibly</div>
+        <div class="eco-item"><span>🏡</span> Cleaner Neighbourhoods</div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services" id="services">
+        <div class="section-heading">
+            <p>OUR SERVICES</p>
+            <h2>Everything You Need</h2>
+            <span>Manage your household waste quickly and easily.</span>
+        </div>
+
+        <div class="cards">
+            <div class="service-card schedule-card">
+                <div class="card-icon">🚛</div>
+                <h3>Schedule Waste Pickup</h3>
+                <p>Choose your pickup date, time and waste type for easy waste collection.</p>
+                <button onclick="showSection('scheduleSection')">Schedule Pickup →</button>
+            </div>
+
+            <div class="service-card household-card">
+                <div class="card-icon">🏠</div>
+                <h3>Register Household</h3>
+                <p>Register your household with address, ward and contact information.</p>
+                <button onclick="showSection('householdSection')">Register Now →</button>
+            </div>
+
+            <div class="service-card complaint-card">
+                <div class="card-icon">📝</div>
+                <h3>Submit Complaint</h3>
+                <p>Report waste collection problems and submit your complaint easily.</p>
+                <button onclick="showSection('complaintSection')">Submit Complaint →</button>
+            </div>
+
+            <div class="service-card waste-card">
+                <div class="card-icon">♻️</div>
+                <h3>Waste Types</h3>
+                <p>Learn about different waste categories and proper waste management.</p>
+                <button onclick="showSection('wasteSection')">View Waste Types →</button>
+            </div>
+
+            <div class="service-card worker-card">
+                <div class="card-icon">👷</div>
+                <h3>Workers</h3>
+                <p>Register waste collection workers and manage worker information.</p>
+                <button onclick="window.location.href='worker.html'">Manage Workers →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCHEDULE FORM -->
+    <section class="form-section" id="scheduleSection">
+        <div class="form-box">
+            <button class="close-btn" onclick="closeSections()">✕</button>
+            <div class="form-icon">🚛</div>
+            <h2>Schedule Waste Pickup</h2>
+            <p class="form-description">Enter your pickup details below.</p>
+
+            <input type="text" id="pickupHousehold" placeholder="Household Name">
+
+            <select id="wasteType">
+                <option value="">Select Waste Type</option>
+                <option value="Wet Waste">Wet Waste</option>
+                <option value="Dry Waste">Dry Waste</option>
+                <option value="Plastic Waste">Plastic Waste</option>
+                <option value="Electronic Waste">Electronic Waste</option>
+            </select>
+
+            <input type="date" id="pickupDate">
+            <input type="time" id="pickupTime">
+
+            <button class="form-btn" onclick="schedulePickup()">Schedule Pickup</button>
+        </div>
+    </section>
+
+    <!-- HOUSEHOLD FORM -->
+    <section class="form-section" id="householdSection">
+        <div class="form-box">
+            <button class="close-btn" onclick="closeSections()">✕</button>
+            <div class="form-icon">🏠</div>
+            <h2>Register Household</h2>
+            <p class="form-description">Enter household details to register.</p>
+
+            <input type="text" id="householdName" placeholder="Household Name">
+            <input type="text" id="address" placeholder="Address">
+            <input type="text" id="ward" placeholder="Ward">
+            <input type="text" id="phone" placeholder="Phone Number">
+
+            <button id="registerBtn" class="form-btn">Register Household</button>
+        </div>
+    </section>
+
+    <!-- COMPLAINT FORM -->
+    <section class="form-section" id="complaintSection">
+        <div class="form-box">
+            <button class="close-btn" onclick="closeSections()">✕</button>
+            <div class="form-icon">📝</div>
+            <h2>Submit Complaint</h2>
+            <p class="form-description">Tell us about your waste collection problem.</p>
+
+            <input type="text" id="complaintHousehold" placeholder="Household Name">
+            <textarea id="complaint" placeholder="Enter your complaint"></textarea>
+
+            <button id="complaintBtn" class="form-btn">Submit Complaint</button>
+        </div>
+    </section>
+
+    <!-- WASTE TYPES -->
+    <section class="form-section" id="wasteSection">
+        <div class="form-box waste-box">
+            <button class="close-btn" onclick="closeSections()">✕</button>
+            <div class="form-icon">♻️</div>
+            <h2>Waste Types</h2>
+            <p class="form-description">Different types of waste should be separated properly.</p>
+
+            <div class="waste-list">
+                <div class="waste-item">
+                    <span>🥦</span>
+                    <div><strong>Wet Waste</strong><small>Food and organic waste</small></div>
+                </div>
+                <div class="waste-item">
+                    <span>📦</span>
+                    <div><strong>Dry Waste</strong><small>Paper, cardboard and other dry materials</small></div>
+                </div>
+                <div class="waste-item">
+                    <span>🧴</span>
+                    <div><strong>Plastic Waste</strong><small>Plastic bottles and containers</small></div>
+                </div>
+                <div class="waste-item">
+                    <span>💻</span>
+                    <div><strong>Electronic Waste</strong><small>Old electronic devices</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div>
+            <p class="small-title">ABOUT PLATFORM</p>
+            <h2>Making Waste Management Smarter</h2>
+            <p>
+                Waste Pickup Platform helps households manage waste collection
+                efficiently. Users can schedule pickups, register households
+                and submit complaints from one simple platform.
+            </p>
+        </div>
+
+        <div class="about-box">
+            <div><strong>♻️</strong><span>Clean Environment</span></div>
+            <div><strong>🚛</strong><span>Easy Pickup</span></div>
+            <div><strong>🏠</strong><span>Smart Households</span></div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">♻️ Waste Pickup Platform</div>
+        <p>Smart Waste Management System</p>
+        <p class="copyright">© 2026 Waste Pickup Platform. All Rights Reserved.</p>
+    </footer>
+
+    <!-- EXISTING JAVASCRIPT -->
+    <script src="script.js"></script>
+
+    <!-- PAGE UI JAVASCRIPT -->
+    <script>
+        function showSection(sectionId) {
+            closeSections();
+
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.style.display = "flex";
+                section.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
+        }
+
+        function closeSections() {
+            document.querySelectorAll(".form-section").forEach(section => {
+                section.style.display = "none";
+            });
+        }
+
+        function showHome() {
+            closeSections();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function scrollToServices() {
+            document.getElementById("services").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+    </script>
+</body>
+</html>

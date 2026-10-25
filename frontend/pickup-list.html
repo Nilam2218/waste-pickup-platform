@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickup Schedule List</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f8f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000015;
+        }
+
+        h1 {
+            text-align: center;
+            color: #237547;
+        }
+
+        .back {
+            color: #237547;
+            text-decoration: none;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #237547;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f1f8f4;
+        }
+
+        #message {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <a class="back" href="index.html">← Back to Home</a>
+
+        <h1>Pickup Schedule List</h1>
+        <p>All scheduled waste pickups</p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Household ID</th>
+                        <th>Pickup Date</th>
+                        <th>Pickup Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="pickupTable">
+                    <tr>
+                        <td colspan="5">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p id="message"></p>
+    </div>
+
+    <script>
+        async function loadPickups() {
+            const table = document.getElementById("pickupTable");
+            const message = document.getElementById("message");
+
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/pickups"
+                );
+
+                if (!response.ok) {
+                    throw new Error("Failed to load pickups");
+                }
+
+                const pickups = await response.json();
+
+                table.innerHTML = "";
+                message.textContent = "";
+
+                if (!Array.isArray(pickups) || pickups.length === 0) {
+                    table.innerHTML =
+                        '<tr><td colspan="5">No pickup schedules found.</td></tr>';
+                    return;
+                }
+
+                pickups.forEach((pickup, index) => {
+                    const row = document.createElement("tr");
+
+                    const date = pickup.pickupDate
+                        ? new Date(pickup.pickupDate)
+                        : null;
+
+                    // Household ID chya column madhye household name dakhva
+                    let householdName = "Name not found";
+
+                    if (
+                        pickup.household &&
+                        typeof pickup.household === "object"
+                    ) {
+                        householdName =
+                            pickup.household.name || "Name not found";
+                    }
+
+                    const values = [
+                        index + 1,
+                        householdName,
+                        date && !isNaN(date)
+                            ? date.toLocaleDateString()
+                            : "-",
+                        date && !isNaN(date)
+                            ? date.toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            })
+                            : "-",
+                        pickup.status || "-"
+                    ];
+
+                    values.forEach(value => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value;
+                        row.appendChild(cell);
+                    });
+
+                    table.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error("Error loading pickups:", error);
+
+                table.innerHTML =
+                    '<tr><td colspan="5">Unable to load pickups.</td></tr>';
+
+                message.textContent =
+                    "Please check whether the backend server is running.";
+            }
+        }
+
+        loadPickups();
+    </script>
+</body>
+</html>
+```

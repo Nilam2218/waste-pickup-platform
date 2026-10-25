@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard | Waste Pickup Platform</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4fbf5;
+            color: #24352a;
+        }
+
+        header {
+            background: white;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 10px #00000010;
+        }
+
+        header h2 {
+            color: #188038;
+            margin: 0;
+        }
+
+        header a {
+            color: #188038;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .welcome {
+            padding: 40px 6%;
+            background: linear-gradient(135deg, #d9f8e4, #f8fffb);
+        }
+
+        .welcome h1 {
+            color: #188038;
+            margin-top: 0;
+        }
+
+        .container {
+            padding: 30px 6%;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px #0000000d;
+        }
+
+        .card .icon {
+            font-size: 36px;
+        }
+
+        .card h3 {
+            color: #188038;
+        }
+
+        .card p {
+            color: #66736a;
+            line-height: 1.5;
+        }
+
+        .card a {
+            display: inline-block;
+            padding: 10px 14px;
+            background: #188038;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .notice {
+            margin-top: 25px;
+            padding: 18px;
+            background: white;
+            border-left: 4px solid #188038;
+            border-radius: 8px;
+        }
+
+        footer {
+            padding: 22px;
+            text-align: center;
+            color: #66736a;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h2>♻️ Waste Pickup Platform</h2>
+        <a href="index.html">← Back to Home</a>
+    </header>
+
+    <section class="welcome">
+        <h1>Welcome, Customer!</h1>
+        <p>Manage your waste pickup services from one place.</p>
+    </section>
+
+    <main class="container">
+        <h2>Customer Dashboard</h2>
+
+        <div class="cards">
+            <div class="card">
+                <div class="icon">🚛</div>
+                <h3>Schedule Pickup</h3>
+                <p>Plan a waste collection for your household.</p>
+                <a href="pickup-list.html">View Pickups</a>
+            </div>
+
+            <div class="card">
+                <div class="icon">♻️</div>
+                <h3>Waste Types</h3>
+                <p>Learn about different types of waste.</p>
+                <a href="waste-types.html">View Waste Types</a>
+            </div>
+
+            <div class="card">
+                <div class="icon">📢</div>
+                <h3>Complaints</h3>
+                <p>Find help with waste collection issues.</p>
+                <a href="index.html#services">View Services</a>
+            </div>
+        </div>
+
+        <div class="notice">
+            <strong>Keep your neighbourhood clean!</strong>
+            <p>Use the available services to support responsible waste collection.</p>
+        </div>
+    </main>
+
+    <footer>
+        Waste Pickup Platform | Clean & Green ♻️
+    </footer>
+</body>
+</html>

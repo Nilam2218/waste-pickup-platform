@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Waste Pickup Platform</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f6f3;
+    color: #24352a;
+}
+
+header {
+    background: #176b3a;
+    color: white;
+    padding: 22px 30px;
+}
+
+header h1 { margin: 0 0 8px; }
+header p { margin: 0; }
+
+nav {
+    background: white;
+    padding: 15px 30px;
+    box-shadow: 0 2px 6px #00000010;
+}
+
+nav a {
+    color: #176b3a;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 22px;
+}
+
+main {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px #0000000d;
+    border: none;
+    border-left: 5px solid #23864b;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    width: 100%;
+}
+
+.card:hover, .card:focus-visible {
+    box-shadow: 0 5px 18px #176b3a30;
+    outline: 2px solid #23864b;
+}
+
+.card h2 {
+    font-size: 18px;
+    margin: 0 0 15px;
+}
+
+.number {
+    font-size: 34px;
+    font-weight: bold;
+    color: #176b3a;
+}
+
+.description {
+    color: #68766c;
+    margin-top: 8px;
+}
+
+.section {
+    background: white;
+    margin-top: 25px;
+    padding: 24px;
+    border-radius: 14px;
+}
+
+.section h2 { margin-top: 0; }
+
+.action, .refresh {
+    display: inline-block;
+    margin: 5px 8px 5px 0;
+    padding: 12px 16px;
+    background: #176b3a;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.detail-panel {
+    display: none;
+    margin-top: 25px;
+    padding: 24px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px #0000000d;
+}
+
+.table-wrap { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e6e1;
+}
+
+th { background: #e5f2e9; }
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #68766c;
+}
+
+@media (max-width: 600px) {
+    .cards { grid-template-columns: 1fr; }
+    header { padding: 20px; }
+    nav a { display: inline-block; margin: 5px 12px 5px 0; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>♻ Waste Pickup Platform</h1>
+    <p>Admin Dashboard</p>
+</header>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="#overview">Dashboard</a>
+    <a href="#services">Services</a>
+</nav>
+
+<main>
+    <section id="overview">
+        <h2>Dashboard Overview</h2>
+        <p>Welcome, Admin! Manage household registrations, waste pickups and complaints.</p>
+
+        <div class="cards">
+            <button class="card" data-type="households">
+                <h2>🏠 Total Households</h2>
+                <div class="number" id="householdCount">--</div>
+                <div class="description">Click to view household details</div>
+            </button>
+
+            <button class="card" data-type="pickups">
+                <h2>🚛 Pickup Schedules</h2>
+                <div class="number" id="pickupCount">--</div>
+                <div class="description">Click to view pickup schedules</div>
+            </button>
+
+            <button class="card" data-type="complaints">
+                <h2>📝 Total Complaints</h2>
+                <div class="number" id="complaintCount">--</div>
+                <div class="description">Click to view complaints</div>
+            </button>
+
+            <button class="card" data-type="workers">
+                <h2>👷 Total Workers</h2>
+                <div class="number" id="workerCount">--</div>
+                <div class="description">Click to view worker details</div>
+            </button>
+        </div>
+    </section>
+
+    <section class="detail-panel" id="detailPanel">
+        <h2 id="detailTitle">Details</h2>
+        <button class="refresh" id="refreshDetails">↻ Refresh Data</button>
+        <div id="detailContent">Loading...</div>
+    </section>
+
+    <section class="section" id="services">
+        <h2>Quick Actions</h2>
+        <p>Open the platform to register households, schedule pickups or submit complaints.</p>
+        <a class="action" href="index.html">Open Main Website</a>
+        <a class="action" href="#overview">View Dashboard</a>
+    </section>
+</main>
+
+<footer>Waste Pickup Platform | Admin Dashboard</footer>
+
+<script>
+const API = "http://localhost:5000/api";
+
+const resources = {
+    households: {
+        url: "/households",
+        countId: "householdCount",
+        title: "🏠 Household Details",
+        fields: [
+            ["name", "Household Name"],
+            ["address", "Address"],
+            ["ward", "Ward"],
+            ["phone", "Phone"]
+        ]
+    },
+    pickups: {
+        url: "/pickups",
+        countId: "pickupCount",
+        title: "🚛 Pickup Schedules",
+        fields: [
+            ["household.name", "Household"],
+            ["household.address", "Address"],
+            ["household.ward", "Ward"],
+            ["pickupDate", "Pickup Date"],
+            ["status", "Status"]
+        ]
+    },
+    complaints: {
+        url: "/complaints",
+        countId: "complaintCount",
+        title: "📝 Complaint Details",
+        fields: [
+            ["household.name", "Household"],
+            ["complaint", "Complaint"],
+            ["status", "Status"]
+        ]
+    },
+    workers: {
+        url: "/workers",
+        countId: "workerCount",
+        title: "👷 Worker Details",
+        fields: [
+            ["name", "Worker Name"],
+            ["phone", "Phone"],
+            ["ward", "Ward"]
+        ]
+    }
+};
+
+let cachedData = {};
+let currentType = null;
+
+function getValue(object, path) {
+    const value = path.split(".").reduce(
+        (item, key) => item == null ? undefined : item[key],
+        object
+    );
+
+    if (value === undefined || value === null || value === "") {
+        return "";
+    }
+
+    if (path === "pickupDate") {
+        const date = new Date(value);
+        return isNaN(date.getTime()) ? String(value) : date.toLocaleString();
+    }
+
+    if (typeof value === "object") {
+        return JSON.stringify(value);
+    }
+
+    return String(value);
+}
+
+async function fetchData(type) {
+    const response = await fetch(API + resources[type].url);
+
+    if (!response.ok) {
+        throw new Error("API request failed: " + response.status);
+    }
+
+    const data = await response.json();
+
+    if (Array.isArray(data)) return data;
+
+    const possibleKey = type;
+    if (data && Array.isArray(data[possibleKey])) {
+        return data[possibleKey];
+    }
+
+    throw new Error("Unexpected API response");
+}
+
+async function loadCount(type) {
+    const config = resources[type];
+    const countElement = document.getElementById(config.countId);
+
+    try {
+        const data = await fetchData(type);
+        cachedData[type] = data;
+        countElement.textContent = data.length;
+    } catch (error) {
+        countElement.textContent = "!";
+        console.error("Could not load " + type, error);
+    }
+}
+
+function renderTable(type, data) {
+    const config = resources[type];
+    const content = document.getElementById("detailContent");
+    content.replaceChildren();
+
+    if (!data.length) {
+        content.textContent = "No records found.";
+        return;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-wrap";
+
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    config.fields.forEach(([key, label]) => {
+        const th = document.createElement("th");
+        th.textContent = label;
+        headerRow.appendChild(th);
+    });
+
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+
+    data.forEach(item => {
+        const row = document.createElement("tr");
+
+        config.fields.forEach(([key]) => {
+            const cell = document.createElement("td");
+            cell.textContent = getValue(item, key);
+            row.appendChild(cell);
+        });
+
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    wrapper.appendChild(table);
+    content.appendChild(wrapper);
+}
+
+async function showDetails(type) {
+    currentType = type;
+
+    const panel = document.getElementById("detailPanel");
+    const title = document.getElementById("detailTitle");
+    const content = document.getElementById("detailContent");
+
+    title.textContent = resources[type].title;
+    panel.style.display = "block";
+    content.textContent = "Loading details...";
+
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    try {
+        const data = await fetchData(type);
+        cachedData[type] = data;
+        document.getElementById(resources[type].countId).textContent = data.length;
+        renderTable(type, data);
+    } catch (error) {
+        content.textContent =
+            "Could not load details. Check that the backend is running and this API route is available.";
+        console.error(error);
+    }
+}
+
+document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", () => showDetails(card.dataset.type));
+});
+
+document.getElementById("refreshDetails").addEventListener("click", async () => {
+    for (const type of Object.keys(resources)) {
+        await loadCount(type);
+    }
+
+    if (currentType) {
+        await showDetails(currentType);
+    }
+});
+
+async function loadAllCounts() {
+    for (const type of Object.keys(resources)) {
+        await loadCount(type);
+    }
+}
+
+loadAllCounts();
+</script>
+
+</body>
+</html>

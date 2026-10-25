@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Registration - Waste Pickup Platform</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f0f5f1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 450px;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px #00000015;
+    }
+
+    h1 {
+        text-align: center;
+        color: #237547;
+        font-size: 26px;
+    }
+
+    p {
+        text-align: center;
+        color: #666;
+    }
+
+    label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-top: 7px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 16px;
+    }
+
+    button {
+        width: 100%;
+        padding: 13px;
+        margin-top: 22px;
+        background: #237547;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #185a35;
+    }
+
+    .back {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #237547;
+        text-decoration: none;
+    }
+
+    #message {
+        margin-top: 15px;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+```
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Worker Registration</h1>
+        <p>Waste Pickup Platform</p>
+
+
+    <form id="workerForm">
+        <label for="name">Worker Name</label>
+        <input type="text" id="name" placeholder="Enter worker name" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="Enter phone number"
+               pattern="[0-9]{10}" maxlength="10" required>
+
+        <label for="ward">Ward</label>
+        <input type="text" id="ward" placeholder="Enter ward" required>
+
+        <button type="submit">Register Worker</button>
+    </form>
+
+    <div id="message"></div>
+
+    <a class="back" href="admin.html">Back to Admin Dashboard</a>
+</div>
+
+<script>
+    document.getElementById("workerForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const ward = document.getElementById("ward").value.trim();
+        const message = document.getElementById("message");
+
+        try {
+            const response = await fetch("http://localhost:5000/api/workers", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, phone, ward })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                message.style.color = "red";
+                message.textContent = data.message || "Registration failed.";
+                return;
+            }
+
+            message.style.color = "green";
+            message.textContent = "Worker Registered Successfully!";
+
+            document.getElementById("workerForm").reset();
+        } catch (error) {
+            message.style.color = "red";
+            message.textContent = "Backend connection failed. Please check the server.";
+        }
+    });
+</script>
+```
+
+</body>
+</html>

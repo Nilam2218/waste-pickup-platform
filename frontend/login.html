@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Waste Pickup Platform</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eaf4ed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      padding: 32px;
+      border-radius: 14px;
+      box-shadow: 0 5px 20px #00000018;
+    }
+
+    h1 {
+      color: #187746;
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 13px;
+      background: #187746;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #105c35;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #187746;
+      text-decoration: none;
+    }
+
+    #message {
+      margin-top: 14px;
+      text-align: center;
+      color: #b42318;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-box">
+    <h1>Welcome Back!</h1>
+    <p class="subtitle">Waste Pickup Platform Login</p>
+
+    <form id="loginForm">
+      <label for="accountType">Account Type</label>
+      <select id="accountType" required>
+        <option value="">Select Account Type</option>
+        <option value="Customer">Customer</option>
+        <option value="Driver">Driver</option>
+        <option value="Admin">Admin</option>
+      </select>
+
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter your email"
+        required
+      >
+
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter your password"
+        required
+      >
+
+      <button type="submit">Login</button>
+      <p id="message"></p>
+    </form>
+
+    <a class="back-link" href="index.html">← Back to Home</a>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const accountType = document.getElementById("accountType").value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      if (!accountType || !email || !password) {
+        message.textContent = "Please fill in all fields.";
+        return;
+      }
+
+      if (accountType === "Customer") {
+        window.location.href = "home.html";
+      } else if (accountType === "Driver") {
+        window.location.href = "driver-dashboard.html";
+      } else if (accountType === "Admin") {
+        window.location.href = "admin.html";
+      }
+    });
+  </script>
+</body>
+</html>

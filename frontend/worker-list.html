@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker List - Waste Pickup Platform</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: #f0f5f1;
+            color: #26352b;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #237547;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        #message {
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .worker-card {
+            background: white;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px #00000012;
+            border-left: 5px solid #237547;
+        }
+
+        .worker-card h2 {
+            color: #237547;
+            margin: 0 0 18px;
+            font-size: 21px;
+        }
+
+        .detail {
+            margin: 12px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eeeeee;
+            overflow-wrap: anywhere;
+        }
+
+        .detail:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .label {
+            display: block;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        button, .back {
+            display: inline-block;
+            padding: 12px 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            background: #237547;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .back {
+            background: #555;
+        }
+
+        button:hover {
+            background: #185a35;
+        }
+
+        .back:hover {
+            background: #333;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 14px;
+            }
+
+            .worker-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Worker List</h1>
+        <p class="subtitle">Waste Pickup Platform</p>
+
+        <div id="message">Loading workers...</div>
+        <div id="workerList"></div>
+
+        <div class="actions">
+            <button onclick="loadWorkers()">Refresh List</button>
+            <a class="back" href="admin.html">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        async function loadWorkers() {
+            const message = document.getElementById("message");
+            const list = document.getElementById("workerList");
+
+            message.textContent = "Loading workers...";
+            list.replaceChildren();
+
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/workers"
+                );
+
+                const workers = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        workers.message || "Could not load workers."
+                    );
+                }
+
+                if (!Array.isArray(workers) || workers.length === 0) {
+                    message.textContent = "No workers registered yet.";
+                    return;
+                }
+
+                workers.forEach((worker, index) => {
+                    const card = document.createElement("div");
+                    card.className = "worker-card";
+
+                    const heading = document.createElement("h2");
+                    heading.textContent = "Worker " + (index + 1);
+                    card.appendChild(heading);
+
+                    const details = [
+                        ["Worker Name", worker.name],
+                        ["Phone Number", worker.phone],
+                        ["Ward", worker.ward]
+                    ];
+
+                    details.forEach(([labelText, valueText]) => {
+                        const detail = document.createElement("div");
+                        detail.className = "detail";
+
+                        const label = document.createElement("span");
+                        label.className = "label";
+                        label.textContent = labelText;
+
+                        const value = document.createElement("span");
+                        value.className = "value";
+                        value.textContent = valueText || "Not provided";
+
+                        detail.appendChild(label);
+                        detail.appendChild(value);
+                        card.appendChild(detail);
+                    });
+
+                    list.appendChild(card);
+                });
+
+                message.textContent = "Total Workers: " + workers.length;
+
+            } catch (error) {
+                message.textContent =
+                    "Could not load workers. Please check the backend.";
+                console.error(error);
+            }
+        }
+
+        loadWorkers();
+    </script>
+</body>
+</html>
+```
